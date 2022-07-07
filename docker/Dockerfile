@@ -17,4 +17,4 @@ RUN pip3 install --upgrade pip                   &&\
 										  sphinx_rtd_theme &&\
     mkdir /workdir
 
-ADD .. /workdir/
+ADD . /workdir/
