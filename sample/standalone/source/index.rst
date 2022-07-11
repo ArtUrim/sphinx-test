@@ -18,4 +18,5 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`test-requirement`
 * :ref:`test-test`
+* :ref:`test-suite`
 * :ref:`search`

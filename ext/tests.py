@@ -47,15 +47,14 @@ class TestDirective(ObjectDescription):
 
     has_content = True
     required_arguments = 1
-    option_spec = {
-        'reqs': directives.unchanged_required,
-    }
 
     doc_field_types = [
         EnumField('steps', label='Step',
                        names=('step',), can_collapse=True),
         GroupedField( 'reqs', label='Reqs',
               names=('reqs',), can_collapse=True),
+        GroupedField( 'suite', label='Suite',
+              names=('suite',), can_collapse=True),
         Field('initial', label='Init', has_arg=False,
               names=('initial', 'init')),
         Field('pass', label='Pass', has_arg=False,
@@ -68,8 +67,8 @@ class TestDirective(ObjectDescription):
         signode += addnodes.desc_name(text=sig)
         return sig
 
-    def _get_suite(self):
-        suite_str = ':suite:'
+    def _get_suite(self, field : str):
+        suite_str = ":{}:".format(field)
         for ii in self.content.data:
             if ii.startswith(suite_str):
                 return ii[len(suite_str):].strip().split(',')
@@ -77,21 +76,11 @@ class TestDirective(ObjectDescription):
 
     def add_target_and_index(self, name_cls, sig, signode):
         signode['ids'].append('test' + '-' + sig)
-        if 'reqs' in self.options:
-            reqs = [
-                x.strip() for x in self.options.get('reqs').split(',')]
-            
-            req_text = ":reqs: {}".format(self.options['reqs'])
-            # TODO: make a source a little bit more real
-            self.content.append( req_text, source=('costam',12))
-            if self.content.parent:
-                self.content.parent.remove(req_text)
 
-            suite = self._get_suite()
-            tests = self.env.get_domain('test')
-            tests.add_test(sig, reqs,suite)
-        else:
-            logging.error( "Any requirement for test {}".format(sig) )
+        suite = self._get_suite('suite')
+        reqs = self._get_suite('reqs')
+        tests = self.env.get_domain('test')
+        tests.add_test(sig, reqs,suite)
 
     def transform_content(self, contentnode: addnodes.desc_content) -> None:
         counter = 1
