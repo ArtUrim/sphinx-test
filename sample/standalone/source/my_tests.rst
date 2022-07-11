@@ -2,6 +2,7 @@ my\_tests module
 ================
 
 .. test:test:: my_test
+
    :reqs: abcd-1,abdc-3
 
    to jest test
@@ -21,6 +22,7 @@ my\_tests module
    :init: no nie wiem
 
 .. test:test:: inny_test
+
    :reqs: abcd-2, abcd-1
 
    to jest test
