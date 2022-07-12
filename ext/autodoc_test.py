@@ -36,6 +36,8 @@ class TestDocumenter(FunctionDocumenter):
         # one signature per line, indented by column
         prefix = '.. %s:%s:: ' % (domain, directive)
         for i, sig_line in enumerate(sig.split("\n")):
+            if name.startswith('test_'):
+                name = name[5:]
             self.add_line('%s%s%s' % (prefix, name, sig_line),
                           sourcename)
             if i == 0:
@@ -45,6 +47,16 @@ class TestDocumenter(FunctionDocumenter):
                     more_content: Optional[StringList],
                     no_docstring: bool = False
                     ) -> None:
+
+        if 'pytestmark' in dir(self.object):
+            stext = ":suite: "
+            first_s = True
+            for mark in self.object.pytestmark:
+                if not first_s:
+                    stext += ','
+                stext += mark.name
+                first_s = False
+            self.add_line( stext, self.get_sourcename() )
 
         super().add_content(more_content)
 
