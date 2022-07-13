@@ -114,8 +114,9 @@ class RequirementIndex(Index):
 
         # flip from test_reqs to requirement_tests
         for test_name, reqs in test_reqs.items():
-            for requirement in reqs:
-                requirement_tests[requirement].append(test_name)
+            if reqs:
+                for requirement in reqs:
+                    requirement_tests[requirement].append(test_name)
 
         # convert the mapping of requirement to tests to produce the expected
         # output, shown below, using the requirement name as a key to group
