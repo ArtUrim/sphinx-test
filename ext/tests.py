@@ -49,18 +49,16 @@ class TestDirective(ObjectDescription):
     required_arguments = 1
 
     doc_field_types = [
-        EnumField('steps', label='Step',
-                       names=('step',), can_collapse=True),
-        GroupedField( 'reqs', label='Reqs',
-              names=('reqs',), can_collapse=True),
-        GroupedField( 'suite', label='Suite',
-              names=('suite',), can_collapse=True),
-        Field('initial', label='Init', has_arg=False,
-              names=('initial', 'init')),
-        Field('pass', label='Pass', has_arg=False,
-              names=('passcrit', 'pass')),
-        Field('descripton', label='Desc', has_arg=False,
-              names=('description', 'desc')),
+        EnumField('steps', label='Steps',
+              names=('step',), can_collapse=True),
+        Field( 'reqs', label='Reqs',
+              names=('reqs',), has_arg=False),
+        Field( 'suite', label='Suite',
+              names=('suite',), has_arg=False),
+        EnumField('init', label='Init',
+              names=('init','initial'), can_collapse=True),
+        GroupedField('pass', label='Result', can_collapse=True,
+              names=('passcrit', 'pass', 'result')),
     ]
 
     def handle_signature(self, sig, signode):
@@ -84,6 +82,7 @@ class TestDirective(ObjectDescription):
 
     def transform_content(self, contentnode: addnodes.desc_content) -> None:
         counter = 1
+        icount  = 1
         typemap = self.get_field_type_map()
         for child in contentnode:
             if isinstance(child, nodes.field_list):
@@ -94,6 +93,10 @@ class TestDirective(ObjectDescription):
                             fn_text = "step {}".format(counter)
                             field_name.replace_self( nodes.field_name(text=fn_text) )
                             counter += 1
+                        if field_name.astext() == 'init':
+                            fn_text = "init {}".format(icount)
+                            field_name.replace_self( nodes.field_name(text=fn_text) )
+                            icount += 1
 
 
 class RequirementIndex(Index):

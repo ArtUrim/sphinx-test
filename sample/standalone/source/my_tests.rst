@@ -5,37 +5,33 @@ my\_tests module
 
    :reqs: abcd-1,abdc-3
 
-   to jest test
+   to jest test, może działa
 
    :suite: nightly
    :init: tutu
+   :init: no nie wiem
 
-   :passcrit: działa
-
-   :desc: jakoś
+   :passcrit pass: działa
+   :passcrit fail: nie działa
 
    :step: krok 1
    :step: krok 2
    :step: krok 3
 
 
-   :init: no nie wiem
 
 .. test:test:: inny_test
 
    :reqs: abcd-2, abcd-1
 
-   to jest test
+   to jest test, który jakoś działa
 
-   :init: tutu
+   :init: rutu
 
-   :passcrit: działa
+   :passcrit pass: działa
 
-   :desc: jakoś
+   :step: step 1
+   :step: step 2
+   :step: step 3
 
-   :step: krok 1
-   :step: krok 2
-   :step: krok 3
-
-
-   :init: no nie wiem
+   :init: a ja wiem
