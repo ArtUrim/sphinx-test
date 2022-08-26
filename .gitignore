@@ -3,3 +3,4 @@ sample/*/__pycache__/
 sample/*/build/
 
 .pdbrc
+token.log
