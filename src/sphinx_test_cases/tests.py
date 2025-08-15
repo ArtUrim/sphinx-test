@@ -28,7 +28,7 @@ class EnumField(GroupedField):
         listnode = nodes.enumerated_list()
         for fieldarg, content in items:
             par = nodes.paragraph()
-            par.extend(self.make_xrefs(self.rolename, domain, '',
+            par.extend(self.make_xrefs(self.rolename, domain, fieldarg,
                                        addnodes.literal_strong,
                                        env=env, inliner=inliner, location=location))
             par += content
@@ -153,9 +153,10 @@ class SuiteIndex(Index):
         suite_tests = defaultdict(list)
 
         # flip from test_suite to suite_tests
-        for test_name, suite in test_suite.items():
-            for suite in suite:
-                suite_tests[suite].append(test_name)
+        for test_name, suites in test_suite.items():
+            if suites:
+                for suite_name in suites:
+                    suite_tests[suite_name].append(test_name)
 
         # convert the mapping of suite to tests to produce the expected
         # output, shown below, using the suite name as a key to group
@@ -243,15 +244,13 @@ class TestDomain(Domain):
             print('Awww, found nothing')
             return None
 
-    def add_test(self, signature, reqs,suite=None):
-        """Add a new test to the domain."""
-        name = '{}.{}'.format('test', signature)
-        anchor = 'test-{}'.format(signature)
+    def add_test(self, signature: str, reqs: Optional[List[str]], suite: Optional[List[str]] = None) -> None:
+        name = f'test.{signature}'
+        anchor = f'test-{signature}'
 
-        self.data['test_reqs'][name] = reqs
-        if suite:
-            self.data['test_suite'][name] = suite
-        # name, dispname, type, docname, anchor, priority
+        self.data['test_reqs'][name] = reqs or []
+        self.data['test_suite'][name] = suite or []
+
         self.data['tests'].append(
             (name, signature, 'Test', self.env.docname, anchor, 0))
 
